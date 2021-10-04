@@ -171,12 +171,26 @@ async def join_handler(client, message):
 
 
 @app.on_message(filters.command('raised'))
-async def join_handler(client, message):
+async def raised_handler(client, message):
     ic(state.handlers)
     await app.send_message(
         state.chat_id,
         state.raised_hand_members
     )
+
+
+@app.on_message(filters.command('count'))
+async def count_handler(client, message):
+    result = 0
+    for member in state.members:
+        try:
+            result += int(state.members[member]["about"])
+        except ValueError:
+            pass
+        except TypeError:
+            pass
+
+    await client.send_message(state.chat_id, f"Isa: {result}")
 
 
 @app.on_message(filters.command('point'))
