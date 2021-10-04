@@ -1,5 +1,7 @@
 import os
 
+from icecream import ic
+
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
 from dotenv import load_dotenv
@@ -75,13 +77,16 @@ async def on_participant_updated(client, participants):
     for participant in participants:
         user_id = participant.peer.user_id
 
-        print(user_id)
+        ic(user_id)
         changed = state.update(participant)
         # {'can_self_unmute': (False, True), 'raise_hand_rating': (4294988038, None)}
-        # pointed = (
-        #     (changed.get('can_self_unmute', None) == (False, True)) and
-        #     (changed.get('raise_hand_rating', [None, None])[0] > 0)
-        # )
+        pointed = (
+            (changed.get('can_self_unmute', {}) == {"old": False, "new": True}) and
+            (isinstance(changed.get('raise_hand_rating', {}).get("old", None), int)) and
+            (not isinstance(changed.get('raise_hand_rating', {}).get("New", None), int))
+        )
+        ic(changed)
+        ic(pointed)
         print("----")
 
 
