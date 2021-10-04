@@ -1,0 +1,392 @@
+[[package]]
+name = "async-lru"
+version = "1.0.2"
+description = "Simple lru_cache for asyncio"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "click"
+version = "8.0.1"
+description = "Composable command line interface toolkit"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[[package]]
+name = "colorama"
+version = "0.4.4"
+description = "Cross-platform colored terminal text."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "joblib"
+version = "1.0.1"
+description = "Lightweight pipelining with Python functions"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
+name = "nltk"
+version = "3.6.4"
+description = "Natural Language Toolkit"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+click = "*"
+joblib = "*"
+regex = "*"
+tqdm = "*"
+
+[package.extras]
+all = ["scipy", "gensim (<4.0.0)", "pyparsing", "python-crfsuite", "matplotlib", "requests", "numpy", "twython", "scikit-learn"]
+corenlp = ["requests"]
+machine_learning = ["gensim (<4.0.0)", "numpy", "python-crfsuite", "scikit-learn", "scipy"]
+plot = ["matplotlib"]
+tgrep = ["pyparsing"]
+twitter = ["twython"]
+
+[[package]]
+name = "pyaes"
+version = "1.6.1"
+description = "Pure-Python Implementation of the AES block-cipher and common modes of operation"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "pyasn1"
+version = "0.4.8"
+description = "ASN.1 types and codecs"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "pyrogram"
+version = "1.2.9"
+description = "Telegram MTProto API Client Library and Framework for Python"
+category = "main"
+optional = false
+python-versions = "~=3.6"
+
+[package.dependencies]
+async-lru = "1.0.2"
+pyaes = "1.6.1"
+pysocks = "1.7.1"
+
+[[package]]
+name = "pysocks"
+version = "1.7.1"
+description = "A Python SOCKS client module. See https://github.com/Anorov/PySocks for more information."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[[package]]
+name = "pytgcalls"
+version = "2.1.0"
+description = "a library connecting the tgcalls Python binding with MTProto"
+category = "main"
+optional = false
+python-versions = "~=3.6"
+
+[package.dependencies]
+pyrogram = {version = ">=1.2.0", optional = true, markers = "extra == \"pyrogram\""}
+tgcalls = "2.0.0"
+
+[package.extras]
+pyrogram = ["pyrogram (>=1.2.0)"]
+telethon = ["telethon (>=1.23.0)"]
+
+[[package]]
+name = "python-dotenv"
+version = "0.19.0"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
+name = "python-slugify"
+version = "5.0.2"
+description = "A Python Slugify application that handles Unicode"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+text-unidecode = ">=1.3"
+
+[package.extras]
+unidecode = ["Unidecode (>=1.1.1)"]
+
+[[package]]
+name = "regex"
+version = "2021.9.30"
+description = "Alternative regular expression module, to replace re."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "rsa"
+version = "4.7.2"
+description = "Pure-Python RSA implementation"
+category = "main"
+optional = false
+python-versions = ">=3.5, <4"
+
+[package.dependencies]
+pyasn1 = ">=0.1.3"
+
+[[package]]
+name = "telethon"
+version = "1.23.0"
+description = "Full-featured Telegram client library for Python 3"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+pyaes = "*"
+rsa = "*"
+
+[package.extras]
+cryptg = ["cryptg"]
+
+[[package]]
+name = "text-unidecode"
+version = "1.3"
+description = "The most basic Text::Unidecode port"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "tgcalls"
+version = "2.0.0"
+description = "a Python binding for tgcalls C++ library"
+category = "main"
+optional = false
+python-versions = "~=3.6"
+
+[[package]]
+name = "tgcrypto"
+version = "1.2.2"
+description = "Fast Telegram Crypto Library for Python"
+category = "main"
+optional = false
+python-versions = "~=3.6"
+
+[[package]]
+name = "tqdm"
+version = "4.62.3"
+description = "Fast, Extensible Progress Meter"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[package.extras]
+dev = ["py-make (>=0.1.0)", "twine", "wheel"]
+notebook = ["ipywidgets (>=6)"]
+telegram = ["requests"]
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.9"
+content-hash = "5ce400d244dd1fd34ca288092afdfd4e706545221e0ccaca3266b7e814c2866b"
+
+[metadata.files]
+async-lru = [
+    {file = "async_lru-1.0.2.tar.gz", hash = "sha256:baa898027619f5cc31b7966f96f00e4fc0df43ba206a8940a5d1af5336a477cb"},
+]
+click = [
+    {file = "click-8.0.1-py3-none-any.whl", hash = "sha256:fba402a4a47334742d782209a7c79bc448911afe1149d07bdabdf480b3e2f4b6"},
+    {file = "click-8.0.1.tar.gz", hash = "sha256:8c04c11192119b1ef78ea049e0a6f0463e4c48ef00a30160c704337586f3ad7a"},
+]
+colorama = [
+    {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
+    {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
+]
+joblib = [
+    {file = "joblib-1.0.1-py3-none-any.whl", hash = "sha256:feeb1ec69c4d45129954f1b7034954241eedfd6ba39b5e9e4b6883be3332d5e5"},
+    {file = "joblib-1.0.1.tar.gz", hash = "sha256:9c17567692206d2f3fb9ecf5e991084254fe631665c450b443761c4186a613f7"},
+]
+nltk = [
+    {file = "nltk-3.6.4-py3-none-any.whl", hash = "sha256:2b9a54bbd2142282cb41aa4b25b8a356bb96f032f509302b4cca9992eda6e793"},
+    {file = "nltk-3.6.4.zip", hash = "sha256:dd7e8012af25737e6aa7bc26568a319508dca789f13e62afa09798dccc7798b5"},
+]
+pyaes = [
+    {file = "pyaes-1.6.1.tar.gz", hash = "sha256:02c1b1405c38d3c370b085fb952dd8bea3fadcee6411ad99f312cc129c536d8f"},
+]
+pyasn1 = [
+    {file = "pyasn1-0.4.8-py2.4.egg", hash = "sha256:fec3e9d8e36808a28efb59b489e4528c10ad0f480e57dcc32b4de5c9d8c9fdf3"},
+    {file = "pyasn1-0.4.8-py2.5.egg", hash = "sha256:0458773cfe65b153891ac249bcf1b5f8f320b7c2ce462151f8fa74de8934becf"},
+    {file = "pyasn1-0.4.8-py2.6.egg", hash = "sha256:5c9414dcfede6e441f7e8f81b43b34e834731003427e5b09e4e00e3172a10f00"},
+    {file = "pyasn1-0.4.8-py2.7.egg", hash = "sha256:6e7545f1a61025a4e58bb336952c5061697da694db1cae97b116e9c46abcf7c8"},
+    {file = "pyasn1-0.4.8-py2.py3-none-any.whl", hash = "sha256:39c7e2ec30515947ff4e87fb6f456dfc6e84857d34be479c9d4a4ba4bf46aa5d"},
+    {file = "pyasn1-0.4.8-py3.1.egg", hash = "sha256:78fa6da68ed2727915c4767bb386ab32cdba863caa7dbe473eaae45f9959da86"},
+    {file = "pyasn1-0.4.8-py3.2.egg", hash = "sha256:08c3c53b75eaa48d71cf8c710312316392ed40899cb34710d092e96745a358b7"},
+    {file = "pyasn1-0.4.8-py3.3.egg", hash = "sha256:03840c999ba71680a131cfaee6fab142e1ed9bbd9c693e285cc6aca0d555e576"},
+    {file = "pyasn1-0.4.8-py3.4.egg", hash = "sha256:7ab8a544af125fb704feadb008c99a88805126fb525280b2270bb25cc1d78a12"},
+    {file = "pyasn1-0.4.8-py3.5.egg", hash = "sha256:e89bf84b5437b532b0803ba5c9a5e054d21fec423a89952a74f87fa2c9b7bce2"},
+    {file = "pyasn1-0.4.8-py3.6.egg", hash = "sha256:014c0e9976956a08139dc0712ae195324a75e142284d5f87f1a87ee1b068a359"},
+    {file = "pyasn1-0.4.8-py3.7.egg", hash = "sha256:99fcc3c8d804d1bc6d9a099921e39d827026409a58f2a720dcdb89374ea0c776"},
+    {file = "pyasn1-0.4.8.tar.gz", hash = "sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba"},
+]
+pyrogram = [
+    {file = "Pyrogram-1.2.9-py3-none-any.whl", hash = "sha256:85cacbcebb704f6d849ff52b07e1bb4972b4ff81216c3d45ed385e9a5ab057a7"},
+    {file = "Pyrogram-1.2.9.tar.gz", hash = "sha256:0f207cac92f4a4d204037214a1ebb54ba272a9557a22633427880fdef844c012"},
+]
+pysocks = [
+    {file = "PySocks-1.7.1-py27-none-any.whl", hash = "sha256:08e69f092cc6dbe92a0fdd16eeb9b9ffbc13cadfe5ca4c7bd92ffb078b293299"},
+    {file = "PySocks-1.7.1-py3-none-any.whl", hash = "sha256:2725bd0a9925919b9b51739eea5f9e2bae91e83288108a9ad338b2e3a4435ee5"},
+    {file = "PySocks-1.7.1.tar.gz", hash = "sha256:3f8804571ebe159c380ac6de37643bb4685970655d3bba243530d6558b799aa0"},
+]
+pytgcalls = [
+    {file = "pytgcalls-2.1.0-py3-none-any.whl", hash = "sha256:f98d310426ca5617fe77dee4642b45f6407ed9a2ca74b17f269a953e65007698"},
+]
+python-dotenv = [
+    {file = "python-dotenv-0.19.0.tar.gz", hash = "sha256:f521bc2ac9a8e03c736f62911605c5d83970021e3fa95b37d769e2bbbe9b6172"},
+    {file = "python_dotenv-0.19.0-py2.py3-none-any.whl", hash = "sha256:aae25dc1ebe97c420f50b81fb0e5c949659af713f31fdb63c749ca68748f34b1"},
+]
+python-slugify = [
+    {file = "python-slugify-5.0.2.tar.gz", hash = "sha256:f13383a0b9fcbe649a1892b9c8eb4f8eab1d6d84b84bb7a624317afa98159cab"},
+    {file = "python_slugify-5.0.2-py2.py3-none-any.whl", hash = "sha256:6d8c5df75cd4a7c3a2d21e257633de53f52ab0265cd2d1dc62a730e8194a7380"},
+]
+regex = [
+    {file = "regex-2021.9.30-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:66696c8336a1b5d1182464f3af3427cc760118f26d0b09a2ddc16a976a4d2637"},
+    {file = "regex-2021.9.30-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4d87459ad3ab40cd8493774f8a454b2e490d8e729e7e402a0625867a983e4e02"},
+    {file = "regex-2021.9.30-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:78cf6a1e023caf5e9a982f5377414e1aeac55198831b852835732cfd0a0ca5ff"},
+    {file = "regex-2021.9.30-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:255791523f80ea8e48e79af7120b4697ef3b74f6886995dcdb08c41f8e516be0"},
+    {file = "regex-2021.9.30-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:e502f8d4e5ef714bcc2c94d499684890c94239526d61fdf1096547db91ca6aa6"},
+    {file = "regex-2021.9.30-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:4907fb0f9b9309a5bded72343e675a252c2589a41871874feace9a05a540241e"},
+    {file = "regex-2021.9.30-cp310-cp310-win32.whl", hash = "sha256:3be40f720af170a6b20ddd2ad7904c58b13d2b56f6734ee5d09bbdeed2fa4816"},
+    {file = "regex-2021.9.30-cp310-cp310-win_amd64.whl", hash = "sha256:c2b180ed30856dfa70cfe927b0fd38e6b68198a03039abdbeb1f2029758d87e7"},
+    {file = "regex-2021.9.30-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:e6f2d2f93001801296fe3ca86515eb04915472b5380d4d8752f09f25f0b9b0ed"},
+    {file = "regex-2021.9.30-cp36-cp36m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4fa7ba9ab2eba7284e0d7d94f61df7af86015b0398e123331362270d71fab0b9"},
+    {file = "regex-2021.9.30-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:28040e89a04b60d579c69095c509a4f6a1a5379cd865258e3a186b7105de72c6"},
+    {file = "regex-2021.9.30-cp36-cp36m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:f588209d3e4797882cd238195c175290dbc501973b10a581086b5c6bcd095ffb"},
+    {file = "regex-2021.9.30-cp36-cp36m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:42952d325439ef223e4e9db7ee6d9087b5c68c5c15b1f9de68e990837682fc7b"},
+    {file = "regex-2021.9.30-cp36-cp36m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:cae4099031d80703954c39680323dabd87a69b21262303160776aa0e55970ca0"},
+    {file = "regex-2021.9.30-cp36-cp36m-win32.whl", hash = "sha256:0de8ad66b08c3e673b61981b9e3626f8784d5564f8c3928e2ad408c0eb5ac38c"},
+    {file = "regex-2021.9.30-cp36-cp36m-win_amd64.whl", hash = "sha256:b345ecde37c86dd7084c62954468a4a655fd2d24fd9b237949dd07a4d0dd6f4c"},
+    {file = "regex-2021.9.30-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:a6f08187136f11e430638c2c66e1db091105d7c2e9902489f0dbc69b44c222b4"},
+    {file = "regex-2021.9.30-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b55442650f541d195a535ccec33078c78a9521973fb960923da7515e9ed78fa6"},
+    {file = "regex-2021.9.30-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:87e9c489aa98f50f367fb26cc9c8908d668e9228d327644d7aa568d47e456f47"},
+    {file = "regex-2021.9.30-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:e2cb7d4909ed16ed35729d38af585673f1f0833e73dfdf0c18e5be0061107b99"},
+    {file = "regex-2021.9.30-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:d0861e7f6325e821d5c40514c551fd538b292f8cc3960086e73491b9c5d8291d"},
+    {file = "regex-2021.9.30-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:81fdc90f999b2147fc62e303440c424c47e5573a9b615ed5d43a5b832efcca9e"},
+    {file = "regex-2021.9.30-cp37-cp37m-win32.whl", hash = "sha256:8c1ad61fa024195136a6b7b89538030bd00df15f90ac177ca278df9b2386c96f"},
+    {file = "regex-2021.9.30-cp37-cp37m-win_amd64.whl", hash = "sha256:e3770781353a4886b68ef10cec31c1f61e8e3a0be5f213c2bb15a86efd999bc4"},
+    {file = "regex-2021.9.30-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:9c065d95a514a06b92a5026766d72ac91bfabf581adb5b29bc5c91d4b3ee9b83"},
+    {file = "regex-2021.9.30-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9925985be05d54b3d25fd6c1ea8e50ff1f7c2744c75bdc4d3b45c790afa2bcb3"},
+    {file = "regex-2021.9.30-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:470f2c882f2672d8eeda8ab27992aec277c067d280b52541357e1acd7e606dae"},
+    {file = "regex-2021.9.30-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:ad0517df22a97f1da20d8f1c8cb71a5d1997fa383326b81f9cf22c9dadfbdf34"},
+    {file = "regex-2021.9.30-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:c9e30838df7bfd20db6466fd309d9b580d32855f8e2c2e6d74cf9da27dcd9b63"},
+    {file = "regex-2021.9.30-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:5b34d2335d6aedec7dcadd3f8283b9682fadad8b9b008da8788d2fce76125ebe"},
+    {file = "regex-2021.9.30-cp38-cp38-win32.whl", hash = "sha256:e07049cece3462c626d650e8bf42ddbca3abf4aa08155002c28cb6d9a5a281e2"},
+    {file = "regex-2021.9.30-cp38-cp38-win_amd64.whl", hash = "sha256:37868075eda024470bd0feab872c692ac4ee29db1e14baec103257bf6cc64346"},
+    {file = "regex-2021.9.30-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:d331f238a7accfbbe1c4cd1ba610d4c087b206353539331e32a8f05345c74aec"},
+    {file = "regex-2021.9.30-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6348a7ab2a502cbdd0b7fd0496d614007489adb7361956b38044d1d588e66e04"},
+    {file = "regex-2021.9.30-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ce7b1cca6c23f19bee8dc40228d9c314d86d1e51996b86f924aca302fc8f8bf9"},
+    {file = "regex-2021.9.30-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:1f1125bc5172ab3a049bc6f4b9c0aae95a2a2001a77e6d6e4239fa3653e202b5"},
+    {file = "regex-2021.9.30-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:638e98d069b14113e8afba6a54d1ca123f712c0d105e67c1f9211b2a825ef926"},
+    {file = "regex-2021.9.30-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:9a0b0db6b49da7fa37ca8eddf9f40a8dbc599bad43e64f452284f37b6c34d91c"},
+    {file = "regex-2021.9.30-cp39-cp39-win32.whl", hash = "sha256:9910869c472e5a6728680ca357b5846546cbbd2ab3ad5bef986ef0bc438d0aa6"},
+    {file = "regex-2021.9.30-cp39-cp39-win_amd64.whl", hash = "sha256:3b71213ec3bad9a5a02e049f2ec86b3d7c3e350129ae0f4e2f99c12b5da919ed"},
+    {file = "regex-2021.9.30.tar.gz", hash = "sha256:81e125d9ba54c34579e4539a967e976a3c56150796674aec318b1b2f49251be7"},
+]
+rsa = [
+    {file = "rsa-4.7.2-py3-none-any.whl", hash = "sha256:78f9a9bf4e7be0c5ded4583326e7461e3a3c5aae24073648b4bdfa797d78c9d2"},
+    {file = "rsa-4.7.2.tar.gz", hash = "sha256:9d689e6ca1b3038bc82bf8d23e944b6b6037bc02301a574935b2dd946e0353b9"},
+]
+telethon = [
+    {file = "Telethon-1.23.0-py3-none-any.whl", hash = "sha256:60c976f290806445cf9b8468d6dc98c72ad4d8a4ee2ad9de170aaecb1e96cc8e"},
+    {file = "Telethon-1.23.0.tar.gz", hash = "sha256:ba7551ce447e954aad67f3eeba4bab7574cca07a2c6f41e5be69904e6e0ec313"},
+]
+text-unidecode = [
+    {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
+    {file = "text_unidecode-1.3-py2.py3-none-any.whl", hash = "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8"},
+]
+tgcalls = [
+    {file = "tgcalls-2.0.0-cp310-cp310-macosx_10_12_x86_64.whl", hash = "sha256:162704099e712ddc589c75a82aa642ca3ab5996f918e384257fc034a8b47e9ca"},
+    {file = "tgcalls-2.0.0-cp310-cp310-win32.whl", hash = "sha256:ede5a61fee32a6b4ee4cd45f39c933143f502f59f743ce68a3aeff312e61d5ff"},
+    {file = "tgcalls-2.0.0-cp310-cp310-win_amd64.whl", hash = "sha256:ea24f60511962798ccc90e4fc719f3d9605c93ca491c2ea60fe77828c871a00d"},
+    {file = "tgcalls-2.0.0-cp36-cp36m-macosx_10_12_x86_64.whl", hash = "sha256:4005d6be6ec2538e1af9aebf5f93e561b8589068321b4ba9a9b47b59c6358a03"},
+    {file = "tgcalls-2.0.0-cp36-cp36m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:67c8cad204679654b12be930a56c3e68f7c44ac0a1d86ca7717f2b2e119d1f8a"},
+    {file = "tgcalls-2.0.0-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:72fb5f99802d61fcd75570a6549d3284db34fe7a183035fa88dae7c178153342"},
+    {file = "tgcalls-2.0.0-cp36-cp36m-win32.whl", hash = "sha256:2d0bffff02952128029212a333213347ed1c7623959ad10e73085e3216a318e6"},
+    {file = "tgcalls-2.0.0-cp36-cp36m-win_amd64.whl", hash = "sha256:7ea7a0534fd402c09d1c2a3852c56148a1d16e2e6b5adc7ad53e562873f5caad"},
+    {file = "tgcalls-2.0.0-cp37-cp37m-macosx_10_12_x86_64.whl", hash = "sha256:e5dec38444a0e466a81c4e23f90c3f3ada183c01a4dc83590d0e12e14de31580"},
+    {file = "tgcalls-2.0.0-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f494163f891bd50e8f85e7372239b65e83837840bce9484ab14ee22abf08eb97"},
+    {file = "tgcalls-2.0.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1d1f633a9c7d17be57b70c7b2ae65e44a595b803415022a0902dba03e754c7fe"},
+    {file = "tgcalls-2.0.0-cp37-cp37m-win32.whl", hash = "sha256:279393b82d678f45ad536ab6d2e676649a39390fa639afa41b149279ee93a450"},
+    {file = "tgcalls-2.0.0-cp37-cp37m-win_amd64.whl", hash = "sha256:8984153f0c828a2e2493df899ef913d9fff8cfce2145a4a811612022742096be"},
+    {file = "tgcalls-2.0.0-cp38-cp38-macosx_10_12_x86_64.whl", hash = "sha256:15efd80c0a4e9a721baa8c01344f7340dcc7043fbbf4108eddaf07a5a43ecddc"},
+    {file = "tgcalls-2.0.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4358aec40f654d8235571a6c2d84a3d22ae09eb516e1bd15b44de6360d87e7c7"},
+    {file = "tgcalls-2.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:392eb284d07fb499ccc48bfdde0fe8614e157862a6c3e1ca0d7a1eb3d9b51c6b"},
+    {file = "tgcalls-2.0.0-cp38-cp38-win32.whl", hash = "sha256:3ac3ec33dde1ca47e60e645088ad9fa9a891eb0cc2d552de3d13de147a9921ca"},
+    {file = "tgcalls-2.0.0-cp38-cp38-win_amd64.whl", hash = "sha256:6da16b3363f38d255dae42d00624a1137ddb6932515c91b340c2c04bfa76910f"},
+    {file = "tgcalls-2.0.0-cp39-cp39-macosx_10_12_x86_64.whl", hash = "sha256:483348b522813a36e23fca628ea0f6c2ecf7326b308c039e2788665d4fbe7fca"},
+    {file = "tgcalls-2.0.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:98ca36fa1bd9d72e6e06ea25d478026bd9cd283227915a4949cd66b5d85eea58"},
+    {file = "tgcalls-2.0.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7d23102e50a6b7db2be4f785f5987a5f93435a237259b5a84efe54e40a8b3456"},
+    {file = "tgcalls-2.0.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:06aa52c363ee74c269d1354776258d6aa0cb5ed9d683561cf06e59d97ae4df66"},
+    {file = "tgcalls-2.0.0-cp39-cp39-win32.whl", hash = "sha256:cc51b9f69e8d108a8df746d2c17495ca065700c8e62807213e488f7dd1dd6940"},
+    {file = "tgcalls-2.0.0-cp39-cp39-win_amd64.whl", hash = "sha256:366f00223bc7e1f881ccf5a88a031dbf60023ae68e378f7d26d78a21e73a0fe9"},
+]
+tgcrypto = [
+    {file = "TgCrypto-1.2.2-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:2073aa6bbc809a56ae3d54e0f496cacaee6e5cb7c08682153c992eae72b4fbb8"},
+    {file = "TgCrypto-1.2.2-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:bca8bcc1432d00955110173d0acd8410e2911ed9c8d05afae1a2ace4748314f1"},
+    {file = "TgCrypto-1.2.2-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:4a6c9d045a68eda43e4064aba32dbf1c40472143ed88f20315dfad867f9cddfb"},
+    {file = "TgCrypto-1.2.2-cp36-cp36m-manylinux2010_i686.whl", hash = "sha256:611a02defa3dc0c4ead98987992cb7d967c4741f477a27fececd31da367b2046"},
+    {file = "TgCrypto-1.2.2-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:d118dd9f297406d385d2bdd6e92ecc3a8443ea1c35ce70b4e892ce95c3808fb5"},
+    {file = "TgCrypto-1.2.2-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:e34917079682579a90dbcadb6b44bc3cbb73efb1657e7dc19839de2428922d30"},
+    {file = "TgCrypto-1.2.2-cp36-cp36m-win32.whl", hash = "sha256:8160b2f0c4b9e5672567d53f5a0f4d5c1ada54021dc93225b38a802ffa42b4e0"},
+    {file = "TgCrypto-1.2.2-cp36-cp36m-win_amd64.whl", hash = "sha256:b5c7cb0e179c29b77f1b2b806edb7d01d9b4f205ca4f65c40375a3bb6a43bea4"},
+    {file = "TgCrypto-1.2.2-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:a0238007a6a68b7a99d118cfaa49a72b024a5bc3f7e9a60b07c1ba850a8d1d45"},
+    {file = "TgCrypto-1.2.2-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:7465a7df82cd8f79ea434f3e958d010fb5db80099f4034d441f2d6119afbdc9c"},
+    {file = "TgCrypto-1.2.2-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:8ee83902dd1e8bee467df6b58acb5e08e72a655afa1da655561d3e73edbef936"},
+    {file = "TgCrypto-1.2.2-cp37-cp37m-manylinux2010_i686.whl", hash = "sha256:aa13cd10e8edf2520f3bff4f3327347e2883945c8b8c4a55f2b886f61cac13fa"},
+    {file = "TgCrypto-1.2.2-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:37259c0a81d9170a1c9213d898e3ad2ec2973be361428e92be722f8af2029fb9"},
+    {file = "TgCrypto-1.2.2-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:cad01599f511c502518f99869069d311a9e3df37324e077ca5742061395daa84"},
+    {file = "TgCrypto-1.2.2-cp37-cp37m-win32.whl", hash = "sha256:ab0cc75142fab303bb7c8be5c60f0bff02378921d7cb3269db5d46bbc6c1792b"},
+    {file = "TgCrypto-1.2.2-cp37-cp37m-win_amd64.whl", hash = "sha256:feb71d6865cbf781ef36aeca075b6b86a19f3367958677ecd4912c69f25aa0af"},
+    {file = "TgCrypto-1.2.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:6efe4b3f050fe6c3bd820abf4a4c0854ea5fcb934bf76a9155e51347fc7d6796"},
+    {file = "TgCrypto-1.2.2-cp38-cp38-manylinux1_i686.whl", hash = "sha256:99154a515f68e75ddf76082c64eae522fe08620d9bcf8ebbf1d2f931bed07781"},
+    {file = "TgCrypto-1.2.2-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:c7d1180c63b9cf774d474a0c6c27d7f3ee367d808589bbe218e4567ebc6bd4df"},
+    {file = "TgCrypto-1.2.2-cp38-cp38-manylinux2010_i686.whl", hash = "sha256:3cd17b033754c7dc08b346ac430e81a162a143bb42a7ffc5b8420872e5432f51"},
+    {file = "TgCrypto-1.2.2-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:d4e1b08733c09c0056ede44366ebe65cec7a5f19b78ff009aacbc9ac9158fcf6"},
+    {file = "TgCrypto-1.2.2-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:cb9c74812093554de4c99578758753a3034a62ad23672e4b80ce8381ec93eb6f"},
+    {file = "TgCrypto-1.2.2-cp38-cp38-win32.whl", hash = "sha256:1d2223d3700590b63df905b825f7e01aee1da7a7309d0a7cd8496fe0cfce9a0c"},
+    {file = "TgCrypto-1.2.2-cp38-cp38-win_amd64.whl", hash = "sha256:bf210e4d7320d75737092bbb9f67b8d5fd2146fd2dc6786337961acbc9d94945"},
+    {file = "TgCrypto-1.2.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:c89c25678704890ebe653ee528046844eb8470d205235a21c9db91cd4d12ed85"},
+    {file = "TgCrypto-1.2.2-cp39-cp39-manylinux1_i686.whl", hash = "sha256:230cb83d87ed9d289445801483de35035d60f14811a601c3b80dbf68fdb15a18"},
+    {file = "TgCrypto-1.2.2-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:0efb29c804be7c2a66ea0855665d6196e0643f17f6e2c2c768aa0b5b784690de"},
+    {file = "TgCrypto-1.2.2-cp39-cp39-manylinux2010_i686.whl", hash = "sha256:1292a586bbf161d23beeacc0ddf5b26553c875d380d14d08b6c2283dabd05447"},
+    {file = "TgCrypto-1.2.2-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:36a06b45e5776a463b1484b0810c9ce0c79d16ee954ace5fe98fc63c6fe6244d"},
+    {file = "TgCrypto-1.2.2-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:0c7fe235c703099d2ed27d6b4d51823625b84315af2f20aec07420260ef6543e"},
+    {file = "TgCrypto-1.2.2-cp39-cp39-win32.whl", hash = "sha256:e2c95040772d7db6c4ae55868de38c218c806edbef969f6de17983a2663b9699"},
+    {file = "TgCrypto-1.2.2-cp39-cp39-win_amd64.whl", hash = "sha256:476a413105d96b6f87a5f58b13e2de3b5328cdc98c426758727dd1f8049bca65"},
+    {file = "TgCrypto-1.2.2.tar.gz", hash = "sha256:df1d7bc592309eab34ea132f41acc2d7d6e0756ec5fbc0263922cb0e0326c6ef"},
+]
+tqdm = [
+    {file = "tqdm-4.62.3-py2.py3-none-any.whl", hash = "sha256:8dd278a422499cd6b727e6ae4061c40b48fce8b76d1ccbf5d34fca9b7f925b0c"},
+    {file = "tqdm-4.62.3.tar.gz", hash = "sha256:d359de7217506c9851b7869f3708d8ee53ed70a1b8edbba4dbcb47442592920d"},
+]
