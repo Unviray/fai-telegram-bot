@@ -182,15 +182,20 @@ async def raised_handler(client, message):
 @app.on_message(filters.command('count'))
 async def count_handler(client, message):
     result = 0
+    no_result = 0
     for member in state.members:
         try:
-            result += int(state.members[member]["about"])
+            if state.members[member] is not None:
+                result += int(state.members[member]["about"])
         except ValueError:
-            pass
+            no_result += 1
         except TypeError:
-            pass
+            no_result += 1
 
-    await client.send_message(state.chat_id, f"Isa: {result}")
+    await client.send_message(state.chat_id,
+        f"Isa: {result}\n"
+        f"Tsy Nandefa isa: {no_result}"
+    )
 
 
 @app.on_message(filters.command('point'))
