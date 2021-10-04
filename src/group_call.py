@@ -30,8 +30,17 @@ class State:
     chat_id = 0
     members = dict()
     raised_hand_members = []
+    pointed = None
 
     handlers = dict()
+
+    def __init__(self) -> None:
+        self.on_changed(["raise_hand_rating"])(
+            self.raise_hand_handler
+        )
+        self.on_changed(["muted"])(
+            self.muted_handler
+        )
 
     async def update(self, client, participant):
         changed = dict()
@@ -51,7 +60,6 @@ class State:
                 "can_self_unmute": participant.can_self_unmute,
                 "just_joined": participant.just_joined,
                 "versioned": participant.versioned,
-                "min": participant.min,
                 "muted_by_you": participant.muted_by_you,
                 "volume_by_admin": participant.volume_by_admin,
                 "is_self": participant.is_self,
@@ -61,6 +69,8 @@ class State:
                 "about": participant.about,
                 "raise_hand_rating": participant.raise_hand_rating,
             }
+
+        ic(participant.peer, changed)
 
         await self._trigger_change(client, participant.peer, changed)
 
@@ -84,8 +94,33 @@ class State:
                         client,
                         peer=peer,
                         old=changed[key]["old"],
-                        new=changed[key]["new"]
+                        new=changed[key]["new"],
+                        changed=changed
                     )
+
+    async def raise_hand_handler(self, client, peer, old, new, changed):
+        if new is None:
+            self.raised_hand_members.remove(peer.user_id)
+
+            if changed.get('can_self_unmute', {}) == {
+                "old": False, "new": True
+            }:
+                if self.pointed is None:
+                    self.pointed = peer.user_id
+
+                for member in self.raised_hand_members:
+                    input_peer = await client.resolve_peer(member)
+
+                    # Unraise hand
+                    await group_call.edit_group_call_member(input_peer, muted=False)
+                    await group_call.edit_group_call_member(input_peer, muted=True)
+
+        else:
+            self.raised_hand_members.append(peer.user_id)
+
+    async def muted_handler(self, client, peer, old, new, changed):
+        if new and (self.pointed == peer.user_id):
+            self.pointed == None
 
 
 
@@ -93,7 +128,7 @@ state = State()
 
 
 @group_call.on_network_status_changed
-async def on_network_changed(client, is_connected):
+async def on_network_changed(_, is_connected):
     if is_connected:
         await app.send_message(state.chat_id, 'Successfully joined!')
     else:
@@ -118,13 +153,14 @@ async def on_participant_updated(_, participants):
 
 
 @state.on_changed(["raise_hand_rating"])
-async def raise_hand_handler(client, peer, old, new):
+async def raise_hand_handler(client, peer, old, new, changed):
     # Auto unmute If member raise hand
-    if isinstance(new, int):
-        await group_call.edit_group_call_member(
-            await client.resolve_peer(peer.user_id),
-            muted=False
-        )
+    # if isinstance(new, int):
+    #     await group_call.edit_group_call_member(
+    #         await client.resolve_peer(peer.user_id),
+    #         muted=False
+    #     )
+    pass
 
 
 
@@ -132,6 +168,23 @@ async def raise_hand_handler(client, peer, old, new):
 async def join_handler(client, message):
     state.chat_id = message.chat.id
     await group_call.start(state.chat_id)
+
+
+@app.on_message(filters.command('raised'))
+async def join_handler(client, message):
+    ic(state.handlers)
+    await app.send_message(
+        state.chat_id,
+        state.raised_hand_members
+    )
+
+
+@app.on_message(filters.command('point'))
+async def join_handler(client, message):
+    input_peer = await client.resolve_peer(message.command[1])
+
+    await group_call.edit_group_call_member(input_peer, muted=False)
+
 
 
 @app.on_message(filters.command('down'))
