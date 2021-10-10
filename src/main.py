@@ -1,6 +1,7 @@
 import os
 import asyncio
 import logging
+from icecream import ic
 
 from pyrogram import Client, filters
 from pytgcalls import GroupCallFactory
@@ -44,6 +45,16 @@ def compare(old, new):
     return result
 
 
+def get_id(peer):
+    if isinstance(peer, int):
+        return peer
+
+    try:
+        return peer.user_id
+    except:
+        return peer.channel_id
+
+
 class State:
     chat_id = 0
     members = dict()
@@ -62,15 +73,23 @@ class State:
 
     async def update(self, client, participant):
         changed = dict()
-        user_id = participant.peer.user_id
+        user_id = get_id(participant.peer)
 
         if participant.left:
             self.members[user_id] = None
+
+            log.info(
+                f"{(await id_to_name(client, [user_id]))[0]}: Left"
+            )
         else:
             # if not First created
             if self.members.get(user_id, None) is not None:
                 changed = compare(self.members[user_id], participant)
             else:
+                log.info(
+                    f"{(await id_to_name(client, [user_id]))[0]}: Join"
+                )
+
                 changed = {
                     "date": {"old": None, "new": participant.date},
                     "source": {"old": None, "new": participant.source},
@@ -157,16 +176,18 @@ class State:
         await asyncio.gather(*tasks)
 
     async def raise_hand_handler(self, client, peer, old, new, changed):
-        if old is not None:
-            log.info(f"{peer.user_id}: lower hand")
-            self.raised_hand_members.remove(peer.user_id)
+        if (old is not None):
+            log.info(
+                f"{(await id_to_name(client, [get_id(peer)]))[0]}: lower hand"
+            )
+            self.raised_hand_members.remove(get_id(peer))
 
             if changed.get('can_self_unmute', {}) == {
                 "old": False, "new": True
             }:
                 if self.pointed is None:
-                    log.debug(f"{peer.user_id}: pointed")
-                    self.pointed = peer.user_id
+                    log.debug(f"{get_id(peer)}: pointed")
+                    self.pointed = get_id(peer)
 
                 for member in self.raised_hand_members:
                     input_peer = await client.resolve_peer(member)
@@ -175,13 +196,15 @@ class State:
                     await group_call.edit_group_call_member(input_peer, muted=False)
                     await group_call.edit_group_call_member(input_peer, muted=True)
 
-        else:
-            log.info(f"{peer.user_id}: raise hand")
-            self.raised_hand_members.append(peer.user_id)
+        elif (new is not None):
+            log.info(
+                f"{(await id_to_name(client, [get_id(peer)]))[0]}: raise hand"
+            )
+            self.raised_hand_members.append(get_id(peer))
 
     async def muted_handler(self, client, peer, old, new, changed):
         if (new and
-            (self.pointed == peer.user_id) and
+            (self.pointed == get_id(peer)) and
             (changed.get('can_self_unmute', {}) == {
                 "old": True, "new": False
             })
@@ -191,6 +214,35 @@ class State:
 
 
 state = State()
+
+
+async def id_to_name(client, user_list:list) -> list:
+    members = []
+
+    for member in user_list:
+        user = await client.get_users(member)
+        username = (
+            f"{user.first_name}_"
+            f"{user.last_name if user.last_name else ''}"
+        )
+        members.append(username)
+
+    return members
+
+
+async def name_to_id(client, name) -> list:
+    members = []
+
+    for member in state.members:
+        user = await client.get_users(member)
+        username = (
+            f"{user.first_name}_"
+            f"{user.last_name if user.last_name else ''}"
+        )
+        if name == username:
+            return member
+
+    return None
 
 
 @group_call.on_network_status_changed
