@@ -1,11 +1,13 @@
 import os
 import sys
 import asyncio
+from functools import partial
 
 import nest_asyncio
 from rich.traceback import install
 from prompt_toolkit import PromptSession
 from prompt_toolkit.patch_stdout import patch_stdout
+from prompt_toolkit.completion import NestedCompleter, WordCompleter
 
 from main import log, group_call, state, app
 
@@ -19,12 +21,27 @@ async def id_to_name(client, user_list:list) -> list:
     for member in user_list:
         user = await client.get_users(member)
         username = (
-            f"{user.first_name} "
+            f"{user.first_name}_"
             f"{user.last_name if user.last_name else ''}"
         )
         members.append(username)
 
     return members
+
+
+async def name_to_id(client, name) -> list:
+    members = []
+
+    for member in state.members:
+        user = await client.get_users(member)
+        username = (
+            f"{user.first_name}_"
+            f"{user.last_name if user.last_name else ''}"
+        )
+        if name == username:
+            return member
+
+    return None
 
 
 def arg_parse(arg):
@@ -41,7 +58,35 @@ def arg_parse(arg):
     return arg
 
 
+def member_completer(client, user_list):
+    def completer():
+        return asyncio.run(id_to_name(client, user_list))
+
+    return completer
+
+
 class Commands:
+    def __init__(self, client):
+
+        self.session = PromptSession(completer=NestedCompleter.from_nested_dict({
+            'join': None,
+            'mic': {'on', 'off'},
+            'mic_member': {
+                'on': WordCompleter(member_completer(client, state.members)),
+                'off': WordCompleter(member_completer(client, state.members))
+            },
+            'raised': None,
+            'members': None,
+            'count': {'on', 'off'},
+            'mute': WordCompleter(member_completer(client, state.members)),
+            'unmute': WordCompleter(member_completer(client, state.members)),
+            'exit': None,
+            'quit': None,
+        }))
+
+        self.command_mute = partial(self.command_mic_member, False)
+        self.command_unmute = partial(self.command_mic_member, True)
+
     async def command_join(self, group_id:int):
         log.info(f"Joinning {group_id}")
         state.chat_id = int(group_id)
@@ -94,6 +139,12 @@ class Commands:
                 string_result
             )
 
+    async def command_mic_member(self, activate:bool, username:str):
+        user_id = await name_to_id(self.client, username)
+        input_peer = await self.client.resolve_peer(user_id)
+
+        await group_call.edit_group_call_member(input_peer, muted=(not activate))
+
     async def command_exit(self, *args):
         return "exit"
 
@@ -101,10 +152,9 @@ class Commands:
 
 
 class Cli(Commands):
-    session = PromptSession()
-
     def __init__(self, client):
         self.client = client
+        super(Cli, self).__init__(self.client)
 
     async def get_input(self):
         try:
