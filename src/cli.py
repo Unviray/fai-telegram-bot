@@ -5,6 +5,7 @@ import asyncio
 import nest_asyncio
 from rich.traceback import install
 from prompt_toolkit import PromptSession
+from prompt_toolkit.patch_stdout import patch_stdout
 
 from main import log, group_call, state, app
 
@@ -94,7 +95,7 @@ class Commands:
             )
 
     async def command_exit(self, *args):
-        sys.exit(0)
+        return "exit"
 
     command_quit = command_exit
 
@@ -107,7 +108,8 @@ class Cli(Commands):
 
     async def get_input(self):
         try:
-            return self.session.prompt("> ").split(" ")
+            with patch_stdout(True):
+                return (await self.session.prompt_async("> ")).split(" ")
         except EOFError:
             return ["exit"]
         except KeyboardInterrupt:
@@ -121,7 +123,7 @@ class Cli(Commands):
 
                 command = list(map(arg_parse, command))
                 try:
-                    await func(*command)
+                    return await func(*command)
                 except Exception as e:
                     log.error(e)
             except AttributeError:
@@ -135,7 +137,9 @@ class Cli(Commands):
 
         while True:
             command = await self.get_input()
-            await self.process_input(command)
+            result = await self.process_input(command)
+            if result == "exit":
+                break
 
 
 async def main():
