@@ -190,7 +190,6 @@ class State:
             self.pointed == None
 
 
-
 state = State()
 
 
@@ -205,49 +204,10 @@ async def on_participant_updated(_, participants):
         await state.update(group_call.client, participant)
 
 
-@state.on_changed(["raise_hand_rating"])
-async def raise_hand_handler(client, peer, old, new, changed):
-    # Auto unmute If member raise hand
-    # if isinstance(new, int):
-    #     await group_call.edit_group_call_member(
-    #         await client.resolve_peer(peer.user_id),
-    #         muted=False
-    #     )
-    pass
-
-
-@app.on_message(filters.command('count'))
-async def count_handler(client, message):
-    await client.delete_messages(message.chat.id, message.message_id)
-    result = 0
-    no_result = 0
-    for member in state.members:
-        try:
-            if state.members[member] is not None:
-                result += int(state.members[member]["about"])
-        except ValueError:
-            no_result += 1
-        except TypeError:
-            no_result += 1
-
-    await client.send_message(state.chat_id,
-        f"Isa: {result}\n"
-        f"Tsy Nandefa isa: {no_result}"
-    )
-
-
-@app.on_message(filters.command('point'))
+@app.on_message(filters.command('id'))
 async def join_handler(client, message):
-    await client.send_message(message.chat.id, message.chat.id)
-    log.info(await client.get_users(message.command[1]))
-    # await client.delete_messages(message.chat.id, message.message_id)
-    # input_peer = await client.resolve_peer(message.command[1])
-
-    # await group_call.edit_group_call_member(input_peer, muted=False)
-
-
-def main():
-    app.run()
+    await client.delete_messages(message.chat.id, message.message_id)
+    await client.send_message(message.chat.id, f"ID: {message.chat.id}")
 
 
 if __name__ == "__main__":

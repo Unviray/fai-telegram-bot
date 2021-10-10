@@ -1,9 +1,10 @@
+import os
 import sys
 import asyncio
 
 import nest_asyncio
-from prompt_toolkit import PromptSession
 from rich.traceback import install
+from prompt_toolkit import PromptSession
 
 from main import log, group_call, state, app
 
@@ -17,8 +18,22 @@ class Commands:
         state.chat_id = int(group_id)
         await group_call.start(state.chat_id)
 
+    async def command_mic(self, activate:bool):
+        await group_call.group_call.audio_input_device(
+            os.environ["INPUT_DEVICE"] if activate else None
+        )
+
     async def command_members(self):
-        members = [member for member in state.members]
+        members = []
+
+        for member in state.members:
+            user = await self.client.get_users(member)
+            username = (
+                f"{user.first_name} "
+                f"{user.last_name if user.last_name else ''}"
+            )
+            members.append(username)
+
         log.info(f"{len(members)} members")
         if len(members) > 0:
             log.info("\n".join(members))
@@ -81,10 +96,13 @@ class Cli(Commands):
 
             print()
 
-    async def run(self):
+    async def run(self, auto_join=True):
+        if auto_join:
+            self.command_join(os.environ["GROUP_ID"])
+
         while True:
-                command = await self.get_input()
-                await self.process_input(command)
+            command = await self.get_input()
+            await self.process_input(command)
 
 
 async def main():
