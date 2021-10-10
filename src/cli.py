@@ -12,6 +12,34 @@ install(show_locals=True)
 nest_asyncio.apply()
 
 
+async def id_to_name(client, user_list:list) -> list:
+    members = []
+
+    for member in user_list:
+        user = await client.get_users(member)
+        username = (
+            f"{user.first_name} "
+            f"{user.last_name if user.last_name else ''}"
+        )
+        members.append(username)
+
+    return members
+
+
+def arg_parse(arg):
+    if arg.lower() in ["0", "off", "false", "n", "no"]:
+        return False
+    elif arg.lower() in ["1", "on", "true", "y", "yes"]:
+        return True
+
+    try:
+        return int(arg)
+    except ValueError:
+        pass
+
+    return arg
+
+
 class Commands:
     async def command_join(self, group_id:int):
         log.info(f"Joinning {group_id}")
@@ -19,20 +47,22 @@ class Commands:
         await group_call.start(state.chat_id)
 
     async def command_mic(self, activate:bool):
-        await group_call.group_call.audio_input_device(
-            os.environ["INPUT_DEVICE"] if activate else None
-        )
+        if activate:
+            log.info("Activating mic")
+        else:
+            log.info("Deactivating mic")
+
+        await group_call.set_is_mute(not activate)
+
+    async def command_raised(self):
+        raised_hand_members = await id_to_name(self.client, state.raised_hand_members)
+
+        log.info(f"{len(raised_hand_members)} raise hand")
+        if len(raised_hand_members) > 0:
+            log.info("\n".join(raised_hand_members))
 
     async def command_members(self):
-        members = []
-
-        for member in state.members:
-            user = await self.client.get_users(member)
-            username = (
-                f"{user.first_name} "
-                f"{user.last_name if user.last_name else ''}"
-            )
-            members.append(username)
+        members = await id_to_name(self.client, state.members)
 
         log.info(f"{len(members)} members")
         if len(members) > 0:
@@ -85,20 +115,23 @@ class Cli(Commands):
 
     async def process_input(self, command):
         if (len(command) > 0) and (command != [""]):
+            cmd = command.pop(0)
             try:
-                func = getattr(self, f"command_{command[0]}")
+                func = getattr(self, f"command_{cmd}")
+
+                command = list(map(arg_parse, command))
                 try:
-                    await func(*command[1:])
+                    await func(*command)
                 except Exception as e:
                     log.error(e)
             except AttributeError:
-                log.error(f"command {command[0]} not found")
+                log.error(f"command {cmd} not found")
 
             print()
 
     async def run(self, auto_join=True):
         if auto_join:
-            self.command_join(os.environ["GROUP_ID"])
+            await self.process_input(["join", os.environ["GROUP_ID"]])
 
         while True:
             command = await self.get_input()
