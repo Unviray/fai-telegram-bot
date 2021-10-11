@@ -22,6 +22,7 @@ log = logging.getLogger("rich")
 load_dotenv()
 
 app = Client('fai', os.environ["API_ID"], os.environ["API_HASH"])
+app.get_users()
 
 group_call = GroupCallFactory(app).get_device_group_call(
     os.environ["INPUT_DEVICE"],  # group_call.get_recording_devices()
@@ -216,11 +217,10 @@ class State:
 state = State()
 
 
-async def id_to_name(client, user_list:list) -> list:
+async def id_to_name(client:Client, user_list:list) -> list:
     members = []
 
-    for member in user_list:
-        user = await client.get_users(member)
+    for user in await client.get_users(user_list):
         username = (
             f"{user.first_name}_"
             f"{user.last_name if user.last_name else ''}"
@@ -230,17 +230,16 @@ async def id_to_name(client, user_list:list) -> list:
     return members
 
 
-async def name_to_id(client, name) -> list:
+async def name_to_id(client:Client, name) -> list:
     members = []
 
-    for member in state.members:
-        user = await client.get_users(member)
+    for user in await client.get_users(state.members):
         username = (
             f"{user.first_name}_"
             f"{user.last_name if user.last_name else ''}"
         )
         if name == username:
-            return member
+            return user.id
 
     return None
 

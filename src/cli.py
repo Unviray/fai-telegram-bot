@@ -47,11 +47,11 @@ class Commands:
                 'on': MemberCompeter,
                 'off': MemberCompeter
             },
+            'mute': MemberCompeter,
+            'unmute': MemberCompeter,
             'raised': None,
             'members': None,
             'count': {'on', 'off'},
-            'mute': MemberCompeter,
-            'unmute': MemberCompeter,
             'exit': None,
             'quit': None,
         }))
@@ -136,7 +136,7 @@ class Cli(Commands):
 
     async def get_input(self):
         try:
-            with patch_stdout(True):
+            with patch_stdout(raw=True):
                 return (await self.session.prompt_async("> ")).split(" ")
         except EOFError:
             return ["exit"]
