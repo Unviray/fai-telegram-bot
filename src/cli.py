@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 import asyncio
 from functools import partial
 
@@ -93,7 +94,8 @@ class Commands:
         for member in state.members:
             try:
                 if state.members[member] is not None:
-                    result += int(state.members[member]["about"])
+                    found = re.search(r"(\d+)", state.members[member]["about"])
+                    result += int(found.group(0))
             except ValueError:
                 no_result += 1
             except TypeError:
