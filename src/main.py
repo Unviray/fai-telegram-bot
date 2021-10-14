@@ -233,27 +233,27 @@ class State:
 state = State()
 
 
+NAME_FORMAT = "{first}"
+NAME_FORMAT_FULL = "{first}_{last}"
+
 async def id_to_name(client:Client, user_list:list) -> list:
     members = []
 
     for user in await client.get_users(user_list):
-        username = (
-            f"{user.first_name}_"
-            f"{user.last_name if user.last_name else ''}"
-        )
+        username = NAME_FORMAT_FULL if user.last_name else NAME_FORMAT
+        username = username.format(first=user.first_name, last=user.last_name)
+
         members.append(username)
 
     return members
 
-
-async def name_to_id(client:Client, name) -> list:
+async def name_to_id(client:Client, name:str) -> list:
     members = []
 
     for user in await client.get_users(state.members):
-        username = (
-            f"{user.first_name}_"
-            f"{user.last_name if user.last_name else ''}"
-        )
+        username = NAME_FORMAT_FULL if user.last_name else NAME_FORMAT
+        username = username.format(first=user.first_name, last=user.last_name)
+
         if name == username:
             return user.id
 
