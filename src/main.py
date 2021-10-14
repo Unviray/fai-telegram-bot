@@ -94,7 +94,7 @@ class State:
             self.members[user_id] = None
 
             log.info(
-                f"{(await id_to_name(client, [user_id]))[0]}: [bold magenta]Left[/bold magenta] -->"
+                f"{(await id_to_name(client, [user_id]))[0]}: Left -->"
             )
         else:
             # if not First created
@@ -102,7 +102,7 @@ class State:
                 changed = compare(self.members[user_id], participant)
             else:
                 log.info(
-                    f"{(await id_to_name(client, [user_id]))[0]}: [bold cyan]Join[/bold cyan] <--"
+                    f"{(await id_to_name(client, [user_id]))[0]}: Join <--"
                 )
 
                 changed = {
