@@ -60,6 +60,9 @@ class Commands:
         self.command_mute = partial(self.command_mic_member, False)
         self.command_unmute = partial(self.command_mic_member, True)
 
+        self.c_m = self.command_mute
+        self.c_um = self.command_unmute
+
     async def command_join(self, group_id:int):
         log.info(f"Joinning {group_id}")
         state.chat_id = int(group_id)
@@ -127,16 +130,36 @@ class Commands:
                 string_result
             )
 
-    async def command_mic_member(self, activate:bool, username:str):
+    async def command_mic_member(self, activate:bool, username):
+        if username in ["*", "all"]:
+            username = "all members"
+
         if activate:
             log.info(f"Activating mic of {username}")
         else:
             log.info(f"Deactivating mic of {username}")
 
-        user_id = await name_to_id(self.client, username)
-        input_peer = await self.client.resolve_peer(user_id)
+        if username == "all members":
+            tasks = []
 
-        await group_call.edit_group_call_member(input_peer, muted=(not activate))
+            for member in state.members:
+                tasks.append(asyncio.ensure_future(
+                    self.command_mic_member(
+                        activate,
+                        member
+                    )
+                ))
+
+            await asyncio.gather(*tasks)
+        else:
+            if isinstance(username, str):
+                user_id = await name_to_id(self.client, username)
+            else:
+                user_id = username
+
+            input_peer = await self.client.resolve_peer(user_id)
+
+            await group_call.edit_group_call_member(input_peer, muted=(not activate))
 
     async def command_exit(self, *args):
         return "exit"
