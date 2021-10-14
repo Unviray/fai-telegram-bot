@@ -10,7 +10,7 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.patch_stdout import patch_stdout
 from prompt_toolkit.completion import NestedCompleter, WordCompleter
 
-from main import log, group_call, state, app, id_to_name, name_to_id, get_id
+from main import log, group_call, state, app, id_to_name, name_to_id
 
 install(show_locals=True)
 nest_asyncio.apply()
@@ -91,7 +91,7 @@ class Commands:
     async def command_count(self, send:bool=False):
         result = 0
         no_result = 0
-        no_result_names = []
+        no_result_ids = []
         for member in state.members:
             try:
                 if state.members[member] is not None:
@@ -100,21 +100,21 @@ class Commands:
 
             except ValueError:
                 no_result += 1
-                no_result_names.append(state.members[member]['peer'].user_id)
+                no_result_ids.append(member)
 
             except TypeError:
                 no_result += 1
-                no_result_names.append(state.members[member]['peer'].user_id)
+                no_result_ids.append(member)
 
         string_result = (
             f"Isa: {result}\n"
             f"Tsy Nandefa isa: {no_result}"
         )
 
-        if len(no_result_names) > 0:
+        if len(no_result_ids) > 0:
             string_result += f"\n\nIreto avy no tsy nandefa isa:"
             try:
-                for name in await id_to_name(self.client, no_result_names):
+                for name in await id_to_name(self.client, no_result_ids):
                     string_result += f"\n - {name}"
             except Exception as e:
                 log.error(e)
