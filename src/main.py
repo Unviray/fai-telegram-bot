@@ -92,6 +92,7 @@ class State:
                 )
 
                 changed = {
+                    "peer": participant.peer,
                     "date": {"old": None, "new": participant.date},
                     "source": {"old": None, "new": participant.source},
                     "muted": {"old": None, "new": participant.muted},
@@ -109,6 +110,7 @@ class State:
                 }
 
             self.members[user_id] = {
+                "peer": participant.peer,
                 "date": participant.date,
                 "source": participant.source,
                 "muted": participant.muted,
