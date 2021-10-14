@@ -22,7 +22,21 @@ log = logging.getLogger("rich")
 load_dotenv()
 
 app = Client('fai', os.environ["API_ID"], os.environ["API_HASH"])
-app.get_users()
+
+# FIXME: get_users() missing 1 required positional argument: 'user_ids'
+#
+        # $ python src/cli.py
+        # Traceback (most recent call last):
+        #   File "D:\Projet\Git\fai-telegram-bot\src\cli.py", line 13, in <module>
+        #     from main import log, group_call, state, app, id_to_name, name_to_id, get_id
+        #   File "D:\Projet\Git\fai-telegram-bot\src\main.py", line 25, in <module>
+        #     app.get_users()
+        #   File "C:\Users\########\.virtualenvs\fai-telegram-bot-pD05Zu4U\lib\site-packages\pyrogram\sync.py", line 38, in async_to_sync_wrap
+        #     coroutine = function(*args, **kwargs)
+        # TypeError: get_users() missing 1 required positional argument: 'user_ids'
+#
+#
+# app.get_users()
 
 group_call = GroupCallFactory(app).get_device_group_call(
     os.environ["INPUT_DEVICE"],  # group_call.get_recording_devices()
@@ -92,6 +106,7 @@ class State:
                 )
 
                 changed = {
+                    "peer": participant.peer,
                     "date": {"old": None, "new": participant.date},
                     "source": {"old": None, "new": participant.source},
                     "muted": {"old": None, "new": participant.muted},
@@ -109,6 +124,7 @@ class State:
                 }
 
             self.members[user_id] = {
+                "peer": participant.peer,
                 "date": participant.date,
                 "source": participant.source,
                 "muted": participant.muted,
