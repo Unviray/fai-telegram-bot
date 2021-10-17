@@ -50,6 +50,8 @@ class Commands:
             },
             'mute': MemberCompeter,
             'unmute': MemberCompeter,
+            'm': MemberCompeter,
+            'um': MemberCompeter,
             'raised': None,
             'members': None,
             'count': {'on', 'off'},
@@ -60,8 +62,8 @@ class Commands:
         self.command_mute = partial(self.command_mic_member, False)
         self.command_unmute = partial(self.command_mic_member, True)
 
-        self.c_m = self.command_mute
-        self.c_um = self.command_unmute
+        self.command_m = self.command_mute
+        self.command_um = self.command_unmute
 
     async def command_join(self, group_id:int):
         log.info(f"Joinning {group_id}")
