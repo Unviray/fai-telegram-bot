@@ -89,8 +89,10 @@ class Cli(Commands):
 
     async def run(self, auto_join=True):
         if auto_join:
-            await self.process_input(["join", os.environ["GROUP_ID"]])
-        await self.process_input(["mic", "off"])
+            joinned = await self.process_input(["join", os.environ["GROUP_ID"]])
+
+            if joinned:
+                await self.process_input(["mic", "off"])
 
         while True:
             command = await self.get_input()

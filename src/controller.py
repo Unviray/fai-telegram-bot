@@ -1,7 +1,9 @@
 import re
 import asyncio
-from functools import partial
+from functools import partial, wraps
 from typing import List
+
+from pytgcalls.exceptions import GroupCallNotFoundError
 
 from main import log, state, group_call, id_to_name, name_to_id
 
@@ -9,18 +11,36 @@ from main import log, state, group_call, id_to_name, name_to_id
 class Commands:
     def __init__(self, client):
         self.client = client
+        self.joinned = False
         self.command_mute = partial(self.command_mic_member, False)
         self.command_unmute = partial(self.command_mic_member, True)
 
         self.command_m = self.command_mute
         self.command_um = self.command_unmute
 
-    async def command_join(self, group_id:int):
+    def need_joinned(func):
+        @wraps(func)
+        async def wraped(self, *args, **kwargs):
+            if self.joinned:
+                return await func(self, *args, **kwargs)
+            else:
+                log.error("Join a group call first")
+
+        return wraped
+
+    async def command_join(self, group_id:int) -> bool:
         log.info(f"Joinning {group_id}")
         state.chat_id = int(group_id)
         # await group_call.start(state.chat_id, join_as=state.chat_id)
-        await group_call.start(state.chat_id)
+        try:
+            await group_call.start(state.chat_id)
+            self.joinned = True
+        except GroupCallNotFoundError:
+            self.joinned = False
 
+        return self.joinned
+
+    @need_joinned
     async def command_mic(self, activate:bool):
         if activate:
             log.info("Activating mic")
@@ -29,6 +49,7 @@ class Commands:
 
         await group_call.set_is_mute(not activate)
 
+    @need_joinned
     async def command_raised(self) -> List[str]:
         raised_hand_members = await id_to_name(self.client, state.raised_hand_members)
 
@@ -38,13 +59,15 @@ class Commands:
 
         return raised_hand_members
 
-    async def command_unraise(self, username):
+    @need_joinned
+    async def command_unraise(self, username:str):
         member = await name_to_id(self.client, username)
         input_peer = await self.client.resolve_peer(member)
 
         await group_call.edit_group_call_member(input_peer, muted=False)
         await group_call.edit_group_call_member(input_peer, muted=True)
 
+    @need_joinned
     async def command_members(self) -> List[str]:
         members = await id_to_name(self.client, state.members)
 
@@ -54,6 +77,7 @@ class Commands:
 
         return members
 
+    @need_joinned
     async def command_count(self, send:bool=False) -> dict:
         result = 0
         no_result_names = []
@@ -64,10 +88,10 @@ class Commands:
                     result += int(found.group(0))
 
             except ValueError:
-                no_result_names.append(await id_to_name(self.client, member))
+                no_result_names.append((await id_to_name(self.client, [member]))[0])
 
             except TypeError:
-                no_result_names.append(await id_to_name(self.client, member))
+                no_result_names.append((await id_to_name(self.client, [member]))[0])
 
         string_result = (
             f"Isa: {result}\n"
@@ -96,7 +120,8 @@ class Commands:
         }
 
 
-    async def command_mic_member(self, activate:bool, username):
+    @need_joinned
+    async def command_mic_member(self, activate:bool, username:str):
         if username in ["*", "all"]:
             username = "all members"
 
