@@ -23,20 +23,6 @@ load_dotenv()
 
 app = Client('fai', os.environ["API_ID"], os.environ["API_HASH"])
 
-# FIXME: get_users() missing 1 required positional argument: 'user_ids'
-#
-        # $ python src/cli.py
-        # Traceback (most recent call last):
-        #   File "D:\Projet\Git\fai-telegram-bot\src\cli.py", line 13, in <module>
-        #     from main import log, group_call, state, app, id_to_name, name_to_id, get_id
-        #   File "D:\Projet\Git\fai-telegram-bot\src\main.py", line 25, in <module>
-        #     app.get_users()
-        #   File "C:\Users\########\.virtualenvs\fai-telegram-bot-pD05Zu4U\lib\site-packages\pyrogram\sync.py", line 38, in async_to_sync_wrap
-        #     coroutine = function(*args, **kwargs)
-        # TypeError: get_users() missing 1 required positional argument: 'user_ids'
-#
-#
-# app.get_users()
 
 group_call = GroupCallFactory(app).get_device_group_call(
     os.environ["INPUT_DEVICE"],  # group_call.get_recording_devices()
@@ -75,6 +61,8 @@ class State:
     members = dict()
     raised_hand_members = []
     pointed = None
+
+    AUTO_UNRAISE = True
 
     handlers = dict()
 
@@ -206,12 +194,13 @@ class State:
                     log.debug(f"{get_id(peer)}: pointed")
                     self.pointed = get_id(peer)
 
-                for member in self.raised_hand_members:
-                    input_peer = await client.resolve_peer(member)
+                if self.AUTO_UNRAISE:
+                    for member in self.raised_hand_members:
+                        input_peer = await client.resolve_peer(member)
 
-                    # Unraise hand
-                    await group_call.edit_group_call_member(input_peer, muted=False)
-                    await group_call.edit_group_call_member(input_peer, muted=True)
+                        # Unraise hand
+                        await group_call.edit_group_call_member(input_peer, muted=False)
+                        await group_call.edit_group_call_member(input_peer, muted=True)
 
         elif (new is not None):
             log.info(
