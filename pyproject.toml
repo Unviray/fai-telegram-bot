@@ -15,6 +15,8 @@ rich = "^10.11.0"
 textual = "^0.1.12"
 prompt-toolkit = "^3.0.20"
 nest-asyncio = "^1.5.1"
+aiohttp = "^3.7.4"
+python-socketio = "^5.4.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
