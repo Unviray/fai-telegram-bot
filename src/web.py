@@ -57,6 +57,10 @@ async def join_handler(sid, data):
 async def mute_handler(sid, data):
     await commands.command_mute(data)
 
+@socket.on("unmute")
+async def unmute_handler(sid, data):
+    await commands.command_unmute(data)
+
 
 def main():
     with app:
