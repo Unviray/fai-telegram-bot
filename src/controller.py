@@ -80,7 +80,7 @@ class Commands:
         return members
 
     @need_joinned
-    async def command_count(self, send:bool=False) -> dict:
+    async def command_count(self, send:bool=False, export:bool=True) -> dict:
         result = 0
         result_list = []
         no_result_names = []
@@ -90,7 +90,10 @@ class Commands:
                     found = re.search(r"(\d+)", state.members[member]["about"])
                     result += int(found.group(0))
 
-                    result_list.append({"anarana": (await id_to_name(self.client, [member]))[0], "isa": int(found.group(0))})
+                    result_list.append({
+                        "anarana": (await id_to_name(self.client, [member]))[0],
+                        "isa": int(found.group(0))
+                    })
 
             except ValueError:
                 no_result_names.append((await id_to_name(self.client, [member]))[0])
@@ -113,15 +116,16 @@ class Commands:
 
         log.info(string_result)
 
-        csv_name = f"isa-{datetime.date.today()}.csv"
+        if export:
+            csv_name = f"isa-{datetime.date.today()}.csv"
 
-        with open(csv_name, 'w', newline='', encoding="utf-8") as csvfile:
-            field_names = ['anarana', 'isa']
-            isa_writer = csv.DictWriter(csvfile, fieldnames=field_names)
+            with open(csv_name, 'w', newline='', encoding="utf-8") as csvfile:
+                field_names = ['anarana', 'isa']
+                isa_writer = csv.DictWriter(csvfile, fieldnames=field_names)
 
-            isa_writer.writeheader()
-            for mpanatrika in result_list:
-                isa_writer.writerow({'anarana': mpanatrika["anarana"], 'isa': mpanatrika["isa"]})
+                isa_writer.writeheader()
+                for mpanatrika in result_list:
+                    isa_writer.writerow({'anarana': mpanatrika["anarana"], 'isa': mpanatrika["isa"]})
 
         if send:
             await self.client.send_message(

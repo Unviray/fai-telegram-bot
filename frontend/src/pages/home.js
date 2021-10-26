@@ -1,90 +1,86 @@
 import { useEffect, useState } from "react"
 import { Container, Row, Col, Card, Button } from "react-bootstrap"
-import { Mic, MicOff, MicNone } from "@mui/icons-material"
+import { Mic, MicOff, MicNone, PanTool } from "@mui/icons-material"
 
+import Footer from "../components/footer"
 import socket from "../socket"
 
 
 const Member = props => {
+  const [color, setColor] = useState("dark")
+  const [icon, setIcon] = useState(<MicNone />)
+
   const handleToggleMic = event => {
     socket.emit(
-      (props.statu === "speaking") ? "mute" : "unmute",
-      props.children
+      ((props.children.status === "speaking") || (props.children.status === "pointed")) ? (
+        "mute"
+      ) : (
+        "unmute"
+      ),
+      props.children.name
     )
   }
 
+  useEffect(() => {
+    switch (props.children.status) {
+      case "speaking":
+        setColor("success")
+        setIcon(<Mic />)
+        break
+
+      case "pointed":
+        setColor("dark")
+        setIcon(<MicOff />)
+        break
+
+      case "raised":
+        setColor("primary")
+        setIcon(<PanTool />)
+        break
+
+      case "muted":
+        setColor("danger")
+        setIcon(<MicOff />)
+        break
+
+      default:
+        setColor("secondary")
+        break
+    }
+  }
+  ,[props.children.status])
+
   return (
     <Card className="mb-1">
-      <Card.Body className={props.statu ? "" : "d-none"}>
-        {props.statu}
-      </Card.Body>
-      <Card.Footer className="d-flex">
-        <div className="flex-grow-1">
-          {props.children}
+      <Card.Body className="d-flex p-0">
+        <div className="flex-grow-1 my-auto ms-2">
+          {props.children.name.replace("_", " ")}
         </div>
-        <Button onClick={handleToggleMic} size="sm">
-          {(props.statu === "speaking") ? (
-            <MicOff />
-          ) : (
-            <Mic />
-          )}
+        <Button
+          variant="light"
+          onClick={handleToggleMic}
+          className={`text-${color}`}
+        >
+          {icon}
         </Button>
-      </Card.Footer>
+      </Card.Body>
     </Card>
-  )
-}
-
-
-const List = props => {
-  return (
-    <Col md={4} className="pt-3">
-      {props.children}
-    </Col>
-  )
-}
-
-
-const SpeakingList = props => {
-  return (
-    <List>
-      {props.children.map(member => {
-        return (
-          <Member statu={member.statu}>
-            {member.name}
-          </Member>
-        )
-      })}
-    </List>
-  )
-}
-
-
-const RaisedList = props => {
-  return (
-    <List>
-      {props.children.map(member => {
-        return (
-          <Member statu={member.statu}>
-            {member.name}
-          </Member>
-        )
-      })}
-    </List>
   )
 }
 
 
 const MemberList = props => {
   return (
-    <List>
+    <Col md={3} className="pt-3">
+      <h3>{props.title}</h3>
       {props.children.map(member => {
         return (
-          <Member statu={member.statu}>
-            {member.name}
+          <Member>
+            {member}
           </Member>
         )
       })}
-    </List>
+    </Col>
   )
 }
 
@@ -104,11 +100,13 @@ const Home = props => {
 
           const new_member = {
             name: data.name,
-            statu: undefined
+            can_self_unmute: false,
+            raised: false,
+            muted: true,
+            status: undefined
           }
 
           return [...old_members, new_member]
-
         })
       }
       else {
@@ -118,58 +116,54 @@ const Home = props => {
       }
     })
 
-    socket.on("raise_hand", data => {
-      setMembers(old_members => {
-        const new_members = old_members.slice()
-        for (const member of new_members) {
-          if (member.name === data.name) {
-            if ((data.raise) && (member.statu === undefined)) {
-              member.statu = "raised"
-            }
+    const events = ["raised", "muted", "can_self_unmute"]
 
-            if ((!data.raise) && (member.statu === "raised")) {
-              member.statu = undefined
-            }
-          }
-        }
+    for (const event of events) {
+      socket.on(event, data => {
+        setMembers(old_members => {
+          const new_members = old_members.slice()
+          for (const member of new_members) {
+            if (member.name === data.name) {
+              member[event] = data[event]
 
-        return new_members
-      })
-    })
-
-    socket.on("muted", data => {
-      setMembers(old_members => {
-        const new_members = old_members.slice()
-        for (const member of new_members) {
-          if (member.name === data.name) {
-            if ((data.muted) && (member.statu === "speaking")) {
-              member.statu = undefined
-            }
-
-            if ((!data.muted) && (member.statu === undefined)) {
-              member.statu = "speaking"
+              if (!member.raised && !member.muted) {
+                member.status = "speaking"
+              }
+              if (!member.raised && member.muted && member.can_self_unmute) {
+                member.status = "pointed"
+              }
+              if (member.raised && member.muted && !member.can_self_unmute) {
+                member.status = "raised"
+              }
+              if (!member.raised && member.muted && !member.can_self_unmute) {
+                member.status = "muted"
+              }
             }
           }
-        }
 
-        return new_members
+          return new_members
+        })
       })
-    })
+    }
   }, [])
 
   return (
-    <Container>
-      <Row>
-        <SpeakingList>
-          {members.filter(member => (member.statu === "speaking"))}
-        </SpeakingList>
-        <RaisedList>
-          {members.filter(member => (member.statu === "raised"))}
-        </RaisedList>
-        <MemberList>
-          {members.filter(member => (member.statu === undefined))}
+    <Container className="h-100 d-flex flex-column">
+      <Row className="g-2">
+        <MemberList title="Speaking">
+          {members.filter(member => (member.status === "speaking"))}
+        </MemberList>
+        <MemberList title="Pointed">
+          {members.filter(member => (member.status === "pointed"))}
+        </MemberList>
+        <MemberList title="Raised">
+          {members.filter(member => (member.status === "raised"))}
+        </MemberList>
+        <MemberList title="Muted">
+          {members.filter(member => ((member.status === "muted") || (member.status === undefined)))}
         </MemberList>
       </Row>
+      <Footer />
     </Container>
   )
 }

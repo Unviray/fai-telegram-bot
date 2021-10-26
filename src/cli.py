@@ -55,7 +55,10 @@ class Cli(Commands):
             'raised': None,
             'unraise': MemberCompeter,
             'members': None,
-            'count': {'on', 'off'},
+            'count': {
+                'on': {'on', 'off'},
+                'off': {'on', 'off'}
+            },
             'exit': None,
             'quit': None,
         }))

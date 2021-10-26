@@ -33,9 +33,9 @@ async def member_io_handler(client, peer, enter, changed):
 async def raise_hand_handler(client, peer, old, new, changed):
     log.debug("Send raise_hand signal")
     user = (await id_to_name(client, [get_id(peer)]))[0]
-    await socket.emit("raise_hand", {
+    await socket.emit("raised", {
         "name": user,
-        "raise": new is not None
+        "raised": new is not None
     })
 
 
@@ -49,8 +49,24 @@ async def mute_handler(client, peer, old, new, changed):
     })
 
 
+@state.on_changed(["can_self_unmute"])
+async def self_unmute_handler(client, peer, old, new, changed):
+    log.debug("Send can_self_unmute signal")
+    user = (await id_to_name(client, [get_id(peer)]))[0]
+    await socket.emit("can_self_unmute", {
+        "name": user,
+        "can_self_unmute": new
+    })
+
+
+@state.on_changed(["muted"])
+async def mic_handler(client, peer, old, new, changed):
+    if peer == group_call.my_peer:
+        await socket.emit("my_mic" ,not new)
+
+
 @socket.on("join")
-async def join_handler(sid, data):
+async def join_handler(sid, data:int):
     await commands.command_join(data)
 
 @socket.on("mute")
@@ -60,6 +76,10 @@ async def mute_handler(sid, data):
 @socket.on("unmute")
 async def unmute_handler(sid, data):
     await commands.command_unmute(data)
+
+@socket.on("mic")
+async def mic_handler(sid, data:bool):
+    await commands.command_mic(data)
 
 
 def main():
